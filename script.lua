@@ -7,11 +7,13 @@
  Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
 ]=]
 
+-- Made with gpt lol
+
 -- Instances: 21 | Scripts: 2 | Modules: 0 | Tags: 0
 local G2L = {};
 
 -- StarterGui.NSNndnjdnf
-G2L["1"] = Instance.new("ScreenGui", game:GetService("CoreGui");
+G2L["1"] = Instance.new("ScreenGui", gethui());
 G2L["1"]["Name"] = [[NSNndnjdnf]];
 G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
 
@@ -42,7 +44,6 @@ G2L["4"] = Instance.new("UICorner", G2L["3"]);
 
 -- StarterGui.NSNndnjdnf.Frame.Frame.e
 G2L["5"] = Instance.new("TextBox", G2L["3"]);
-G2L["5"]["CursorPosition"] = -1;
 G2L["5"]["Name"] = [[e]];
 G2L["5"]["PlaceholderColor3"] = Color3.fromRGB(255, 255, 255);
 G2L["5"]["ZIndex"] = 5;
@@ -73,7 +74,6 @@ G2L["7"] = Instance.new("UICorner", G2L["5"]);
 
 -- StarterGui.NSNndnjdnf.Frame.Frame.start
 G2L["8"] = Instance.new("TextBox", G2L["3"]);
-G2L["8"]["CursorPosition"] = -1;
 G2L["8"]["Name"] = [[start]];
 G2L["8"]["PlaceholderColor3"] = Color3.fromRGB(255, 255, 255);
 G2L["8"]["ZIndex"] = 5;
@@ -104,7 +104,6 @@ G2L["a"] = Instance.new("UICorner", G2L["8"]);
 
 -- StarterGui.NSNndnjdnf.Frame.Frame.fnl
 G2L["b"] = Instance.new("TextBox", G2L["3"]);
-G2L["b"]["CursorPosition"] = -1;
 G2L["b"]["Name"] = [[fnl]];
 G2L["b"]["PlaceholderColor3"] = Color3.fromRGB(255, 255, 255);
 G2L["b"]["ZIndex"] = 5;
@@ -198,7 +197,8 @@ local function C_11()
 local script = G2L["11"];
 	-- Função para converter número em extenso
 	
-	local fnl = "!"
+	local fnl = " !"
+	local started = false
 	
 	local unidades = {
 		"UM", "DOIS", "TRÊS", "QUATRO", 
@@ -222,7 +222,8 @@ local script = G2L["11"];
 	
 	-- Função principal para converter número em extenso
 	local function npr(n, mil)
-		if n < 0 or n > 100000 then
+		n = math.round(n)
+		if n < 0 or n > 58573 then
 			return "Número fora do alcance suportado (0 a 100.000)"
 		end
 	
@@ -237,7 +238,7 @@ local script = G2L["11"];
 			if milhares == 1 then
 				resultado = "MIL"
 			else
-				resultado = npr(milhares, true) .. " MIL"
+				resultado = npr(milhares, true) .. "MIL E"
 			end
 		end
 	
@@ -298,16 +299,26 @@ local script = G2L["11"];
 	-- Função para contar até o número com espera de 0.2 segundos
 	function can(start, maxNumero)
 		for i = start, maxNumero do
-			wait(1)
+			if started == false then break end
+			wait(2.5)
 			local extenso = npr(i)
 			game.TextChatService.TextChannels.RBXGeneral:SendAsync(extenso)
-			pcall(function(...) 
-				keypress(Enum.KeyCode.Space)
-			end)
+			game.Players.LocalPlayer.Character.Humanoid.Jump = true
+			
+		end
+	end
+	
+	function test(start, maxNumero)
+		for i = start, maxNumero do
+			local extenso = npr(i)
+			print(extenso)
+	
 		end
 	end
 	
 	repeat wait() until game.TextChatService.TextChannels.RBXGeneral
+	
+	
 	
 	
 	local fr = script.Parent
@@ -317,11 +328,19 @@ local script = G2L["11"];
 	local ss = fr.start
 	local e = fr.e
 	
+	
 	s.MouseButton1Click:Connect(function() 
 		if ss.Text == "" then return end
 		if e.Text == "" then return end
+		if started == false then
+			started = true
+			can(ss.Text, e.Text)
+		else
+			started = false
+		end
 		
-		can(ss.Text, e.Text)
+		
+		
 	end)
 	
 	f:GetPropertyChangedSignal("Text"):Connect(function(...: any) 
